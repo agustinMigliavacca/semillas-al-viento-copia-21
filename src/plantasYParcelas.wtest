@@ -1,0 +1,78 @@
+import parcelas.*
+import plantas.*
+import inta.*
+describe "plantasYparcelas" {
+	const menta = new Menta(anioDeObtencion = 2002, altura = 1)
+	const soja = new Soja(anioDeObtencion = 2009, altura = 0.6)
+	const quinoa = new Quinoa(anioDeObtencion = 2010, espacioQueOcupa = 0.2, altura = 0.4)
+	const sojaTransgenica = new SojaTransgenica(anioDeObtencion = 2008, altura = 0.4)
+	const peperina = new Peperina(anioDeObtencion = 2002, altura = 	1)
+	const parcela1 = new Parcela(largo = 1, ancho = 20,horasDeSolQueRecibe = 10)
+	test "menta" {
+		assert.that(menta.daSemillas())
+		assert.equals(2, menta.espacio())
+		const menta1 = new Menta(anioDeObtencion = 2002, altura = 0.3)
+		assert.notThat(menta1.daSemillas())
+		assert.equals(1.3, menta1.espacio())
+		assert.that(menta.parcelaIdeal(parcela1))
+	}
+	
+	test "soja" {
+		assert.equals(8, soja.horasDeSol())
+		assert.notThat(soja.daSemillas())
+		assert.equals(0.3, soja.espacio())
+		assert.notThat(soja.parcelaIdeal(parcela1))
+		
+	}
+	test "quinoa" {
+		
+		const quinoa1 = new Quinoa(anioDeObtencion = 2006, espacioQueOcupa = 0.9, altura = 0.4)
+		assert.that(quinoa1.daSemillas())
+		assert.that(quinoa1.parcelaIdeal(parcela1))
+		
+	}
+	
+	test "sojaTransgenica" {
+		assert.notThat(sojaTransgenica.daSemillas())
+		
+	}
+	test "pererina" {
+		assert.equals(4, peperina.espacio())
+	}
+	test "parcela1" {
+		assert.equals(20, parcela1.superficie())
+		assert.equals(4, parcela1.cantidadMaxima())
+		const soja1 = new Soja(anioDeObtencion = 2009, altura = 1.1)
+		parcela1.plantar(soja1)
+		parcela1.plantar(soja1)
+		parcela1.plantar(soja1)
+		parcela1.plantar(soja1)
+		assert.notThat(parcela1.tieneComplicaciones())
+		assert.equals(20, parcela1.superficie())
+		assert.equals(4, parcela1.cantidadMaxima())
+		}
+		
+	test "parcelaEcologica" {
+		const ecologica = new ParcelaEcologica(largo = 1, ancho = 20,horasDeSolQueRecibe = 10)
+		assert.notThat(ecologica.seAsociaBien(soja))
+		
+		menta.horasDeSol(12)
+		soja.altura(12)
+		ecologica.plantar(menta)
+		ecologica.plantar(soja)
+		assert.that(ecologica.seAsociaBien(menta))
+	}	
+	
+	test "parcelaIndustrial" {
+		const industrial = new ParcelaIndustrial(largo = 1, ancho = 20,horasDeSolQueRecibe = 10)
+		assert.notThat(industrial.seAsociaBien(menta))
+		menta.horasDeSol(10)
+		assert.that(industrial.seAsociaBien(menta))
+		
+		}
+		
+	
+	}
+
+
+	
